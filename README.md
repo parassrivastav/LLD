@@ -12,6 +12,9 @@ For a principle-by-principle explanation of the design, read
 For association, aggregation, composition, and inheritance, read
 [`Core-relations.md`](Core-relations.md).
 
+For the reusable design patterns used in the project, read
+[`design-patterns.md`](design-patterns.md).
+
 ```bash
 python3 main.py
 python3 -m unittest discover -s tests -v
