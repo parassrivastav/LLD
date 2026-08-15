@@ -7,6 +7,7 @@ from vehicle_system import (
     ElectricMotor,
     InMemoryVehicleRepository,
     Motorcycle,
+    SkodaSlavia,
     VehicleService,
 )
 
@@ -18,8 +19,14 @@ def main() -> None:
     car = Car.from_string("KA01AB1234, Tata, Nexon, 2024", ElectricMotor())
     bike = Motorcycle("KA02XY9876", "Royal Enfield", "Classic", CombustionEngine())
     plane = Aircraft("VT-DEMO", "Cessna", "172", CombustionEngine("aviation fuel"))
+    slavia = SkodaSlavia(
+        "KA03SK2026",
+        variant="1.5 TSI Prestige",
+        transmission="automatic",
+        color="Carbon Steel",
+    )
 
-    for vehicle in (car, bike, plane):  # Same logic works for every subtype.
+    for vehicle in (car, bike, plane, slavia):  # Works for every subtype.
         service.register(vehicle)
         print(vehicle)
         print(" ", vehicle.start())

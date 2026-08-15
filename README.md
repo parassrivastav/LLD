@@ -24,6 +24,17 @@ tests/              # Tests grouped by responsibility
 main.py             # Composition root and runnable demo
 ```
 
+The concrete Slavia example has a clear specialization chain:
+
+```text
+Vehicle -> Car -> Sedan -> SkodaSlavia
+```
+
+- `Vehicle` owns registration, engine, lifecycle, and odometer behavior.
+- `Car` adds seats.
+- `Sedan` adds body style and boot capacity.
+- `SkodaSlavia` fixes the brand/model and adds Slavia specifications.
+
 ## OOP and class features
 
 - `Vehicle` is an abstract base class; `Car`, `Motorcycle`, and `Aircraft`

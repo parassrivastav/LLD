@@ -273,3 +273,15 @@ Good exercises:
 3. Write a test that rejects an empty registration.
 4. Implement a file-based repository matching `VehicleRepository`.
 5. Add a rule preventing `start()` when an engine has no energy.
+
+## 17. Multi-level inheritance: Skoda Slavia
+
+The concrete production-style example uses this chain:
+
+```text
+Vehicle -> Car -> Sedan -> SkodaSlavia
+```
+
+Constructing `SkodaSlavia` calls `Sedan.__init__`, then `Car.__init__`, and finally
+`Vehicle.__init__` through `super()`. Each class initializes only the data it owns.
+The Slavia inherits `start()`, `stop()`, and `drive()` while overriding `move()`.

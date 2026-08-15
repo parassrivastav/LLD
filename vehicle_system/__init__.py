@@ -12,6 +12,8 @@ from vehicle_system.services.vehicle_service import VehicleService
 from vehicle_system.vehicles.aircraft import Aircraft
 from vehicle_system.vehicles.car import Car
 from vehicle_system.vehicles.motorcycle import Motorcycle
+from vehicle_system.vehicles.sedan import Sedan
+from vehicle_system.vehicles.skoda_slavia import SkodaSlavia
 
 __all__ = [
     "Aircraft",
@@ -23,6 +25,8 @@ __all__ = [
     "InvalidVehicleError",
     "Motorcycle",
     "ServiceRecord",
+    "Sedan",
+    "SkodaSlavia",
     "Vehicle",
     "VehicleError",
     "VehicleService",
