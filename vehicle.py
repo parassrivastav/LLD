@@ -9,22 +9,22 @@ from enum import Enum
 from typing import ClassVar, Iterable, Iterator, Protocol
 
 
-class VehicleError(Exception):
+class VehicleError(Exception):  # Custom exception — reports vehicle errors.
     """Base exception for vehicle domain errors."""
 
 
-class InvalidVehicleError(VehicleError, ValueError):
+class InvalidVehicleError(VehicleError, ValueError):  # Inherits both error types.
     """Raised when vehicle data violates a domain rule."""
 
 
-class VehicleState(Enum):
+class VehicleState(Enum):  # Enum — limits state to these fixed values.
     """Enum: a fixed set of allowed values, avoiding arbitrary state strings."""
 
     PARKED = "parked"
     RUNNING = "running"
 
 
-class Engine(ABC):
+class Engine(ABC):  # ABC — blueprint that cannot be used directly.
     """Abstraction implemented by any engine type (DIP and OCP)."""
 
     # Property — reads a method like an attribute: engine.energy_source.
@@ -43,9 +43,9 @@ class Engine(ABC):
         """Stop the engine."""
 
 
-class CombustionEngine(Engine):
+class CombustionEngine(Engine):  # Inheritance — combustion engine is an Engine.
     def __init__(self, fuel: str = "petrol") -> None:
-        self._fuel = fuel
+        self._fuel = fuel  # Instance variable — belongs to this engine object.
 
     @property
     def energy_source(self) -> str:
@@ -58,7 +58,7 @@ class CombustionEngine(Engine):
         return f"{self._fuel.title()} engine stopped"
 
 
-class ElectricMotor(Engine):
+class ElectricMotor(Engine):  # New engine type without changing Vehicle (OCP).
     @property
     def energy_source(self) -> str:
         return "electricity"
@@ -70,7 +70,7 @@ class ElectricMotor(Engine):
         return "Electric motor switched off"
 
 
-class Vehicle(ABC):
+class Vehicle(ABC):  # Abstract parent — shares code between vehicle types.
     """Abstract base class shared by every vehicle.
 
     It deliberately owns only vehicle behavior (SRP). Persistence, printing, and
@@ -92,26 +92,26 @@ class Vehicle(ABC):
         year: int = 2026,
         odometer_km: float = 0,
     ) -> None:  # -> None means this method returns nothing.
-        self.registration = registration
-        self.brand = brand
+        self.registration = registration  # Calls the setter for validation.
+        self.brand = brand  # `self` stores data in this particular object.
         self.model = model
-        self.engine = engine
+        self.engine = engine  # Composition — Vehicle has an Engine.
         self.year = year
         self.odometer_km = odometer_km
-        self._state = VehicleState.PARKED
-        type(self).vehicle_count += 1
+        self._state = VehicleState.PARKED  # `_` marks internal data.
+        type(self).vehicle_count += 1  # Count objects of the concrete class.
 
     # Property and setter — control reading and updating registration.
     @property
     def registration(self) -> str:
-        return self._registration
+        return self._registration  # Getter — returns the internal value.
 
     @registration.setter
     def registration(self, value: str) -> None:
-        cleaned = value.strip().upper()
+        cleaned = value.strip().upper()  # Normalize before storing.
         if not cleaned:
-            raise InvalidVehicleError("registration cannot be empty")
-        self._registration = cleaned
+            raise InvalidVehicleError("registration cannot be empty")  # Stop invalid data.
+        self._registration = cleaned  # Setter — stores the checked value.
 
     @property
     def odometer_km(self) -> float:
@@ -146,8 +146,8 @@ class Vehicle(ABC):
     def start(self) -> str:
         if self._state is VehicleState.RUNNING:
             return f"{self.display_name} is already running"
-        self._state = VehicleState.RUNNING
-        return self.engine.start()
+        self._state = VehicleState.RUNNING  # Change this object's state.
+        return self.engine.start()  # Delegate work to the composed Engine.
 
     def stop(self) -> str:
         if self._state is VehicleState.PARKED:
@@ -164,7 +164,7 @@ class Vehicle(ABC):
         return f"{self.display_name} travelled {distance_km:g} km"
 
     @abstractmethod
-    def move(self) -> str:
+    def move(self) -> str:  # Subclasses must override this method.
         """Describe movement; subclasses provide polymorphic behavior."""
 
     # Dunder methods — define print, debug, equality, and set/dict behavior.
@@ -186,21 +186,21 @@ class Vehicle(ABC):
         return hash(self.registration)
 
 
-class Car(Vehicle):
-    wheels = 4
+class Car(Vehicle):  # Inheritance — Car gets Vehicle's common behavior.
+    wheels = 4  # Override the parent's class variable.
 
     def __init__(self, *args: object, seats: int = 5, **kwargs: object) -> None:
         # super() — reuses the parent Vehicle constructor.
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)  # Run Vehicle.__init__ first.
         if seats < 1:
             raise InvalidVehicleError("a car needs at least one seat")
         self.seats = seats
 
-    def move(self) -> str:
+    def move(self) -> str:  # Overriding — Car provides its own movement.
         return f"{self.display_name} drives on {self.wheels} wheels"
 
 
-class Motorcycle(Vehicle):
+class Motorcycle(Vehicle):  # Another Vehicle subtype (LSP).
     wheels = 2
 
     def move(self) -> str:
@@ -214,7 +214,7 @@ class Flyable(Protocol):
     def fly(self) -> str: ...
 
 
-class Aircraft(Vehicle):
+class Aircraft(Vehicle, Flyable):  # Implements both Vehicle and Flyable contracts.
     wheels = 3
 
     def move(self) -> str:
@@ -232,12 +232,12 @@ class VehicleRepository(Protocol):
     def get(self, registration: str) -> Vehicle | None: ...
 
 
-class InMemoryVehicleRepository:
+class InMemoryVehicleRepository:  # Stores vehicles in memory, not a database.
     def __init__(self) -> None:
-        self._vehicles: dict[str, Vehicle] = {}
+        self._vehicles: dict[str, Vehicle] = {}  # registration -> vehicle
 
     def save(self, vehicle: Vehicle) -> None:
-        self._vehicles[vehicle.registration] = vehicle
+        self._vehicles[vehicle.registration] = vehicle  # Save using a unique key.
 
     def get(self, registration: str) -> Vehicle | None:
         return self._vehicles.get(registration.strip().upper())
@@ -249,11 +249,11 @@ class InMemoryVehicleRepository:
         return iter(self._vehicles.values())
 
 
-class VehicleService:
+class VehicleService:  # Service — contains application rules, not storage.
     """High-level use case depending on abstractions (DIP)."""
 
     def __init__(self, repository: VehicleRepository) -> None:
-        self._repository = repository
+        self._repository = repository  # Dependency injection (DIP).
 
     def register(self, vehicle: Vehicle) -> None:
         if self._repository.get(vehicle.registration):
@@ -262,7 +262,7 @@ class VehicleService:
 
     def movement_report(self, vehicles: Iterable[Vehicle]) -> list[str]:
         """Works with every valid subtype (polymorphism and LSP)."""
-        return [vehicle.move() for vehicle in vehicles]
+        return [vehicle.move() for vehicle in vehicles]  # Same call, different behavior.
 
 
 # Frozen dataclass — creates boilerplate methods and prevents field changes.
@@ -276,14 +276,14 @@ class ServiceRecord:
 
 
 def main() -> None:
-    repository = InMemoryVehicleRepository()
-    service = VehicleService(repository)
+    repository = InMemoryVehicleRepository()  # Create the low-level dependency.
+    service = VehicleService(repository)  # Inject it into the high-level service.
 
     car = Car.from_string("KA01AB1234, Tata, Nexon, 2024", ElectricMotor())
     bike = Motorcycle("KA02XY9876", "Royal Enfield", "Classic", CombustionEngine())
     plane = Aircraft("VT-DEMO", "Cessna", "172", CombustionEngine("aviation fuel"))
 
-    for vehicle in (car, bike, plane):
+    for vehicle in (car, bike, plane):  # Polymorphism — one loop, three types.
         service.register(vehicle)
         print(vehicle)
         print(" ", vehicle.start())
