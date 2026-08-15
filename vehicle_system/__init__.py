@@ -10,10 +10,10 @@ from vehicle_system.engines.electric import ElectricMotor
 from vehicle_system.repositories.memory import InMemoryVehicleRepository
 from vehicle_system.services.vehicle_service import VehicleService
 from vehicle_system.vehicles.aircraft import Aircraft
-from vehicle_system.vehicles.car import Car
+from vehicle_system.vehicles.cars.car import Car
+from vehicle_system.vehicles.cars.sedans.sedan import Sedan
+from vehicle_system.vehicles.cars.sedans.skoda.slavia import SkodaSlavia
 from vehicle_system.vehicles.motorcycle import Motorcycle
-from vehicle_system.vehicles.sedan import Sedan
-from vehicle_system.vehicles.skoda_slavia import SkodaSlavia
 
 __all__ = [
     "Aircraft",

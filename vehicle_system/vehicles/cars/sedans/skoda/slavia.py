@@ -3,10 +3,10 @@
 from vehicle_system.domain.engine import Engine
 from vehicle_system.domain.exceptions import InvalidVehicleError
 from vehicle_system.engines.combustion import CombustionEngine
-from vehicle_system.vehicles.sedan import Sedan
+from vehicle_system.vehicles.cars.sedans.sedan import Sedan
 
 
-class SkodaSlavia(Sedan):  # Concrete model at the end of the inheritance chain.
+class SkodaSlavia(Sedan):  # Final class: Vehicle -> Car -> Sedan -> Slavia.
     wheels = 4
     boot_capacity_litres = 521
     fuel_tank_litres = 45
@@ -38,7 +38,7 @@ class SkodaSlavia(Sedan):  # Concrete model at the end of the inheritance chain.
             registration,
             "Skoda",
             "Slavia",
-            engine or CombustionEngine("petrol"),  # Sensible default; still injectable.
+            engine or CombustionEngine("petrol"),
             year=year,
             odometer_km=odometer_km,
             seats=5,

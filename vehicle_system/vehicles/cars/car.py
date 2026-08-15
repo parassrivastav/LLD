@@ -1,4 +1,4 @@
-"""Car implementation."""
+"""Base class for passenger cars."""
 
 from typing import Any
 

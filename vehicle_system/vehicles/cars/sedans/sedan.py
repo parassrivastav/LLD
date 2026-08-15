@@ -1,9 +1,9 @@
-"""Sedan specialization shared by concrete sedan models."""
+"""Base class for sedan cars."""
 
 from typing import Any
 
 from vehicle_system.domain.exceptions import InvalidVehicleError
-from vehicle_system.vehicles.car import Car
+from vehicle_system.vehicles.cars.car import Car
 
 
 class Sedan(Car):  # Inheritance chain: Vehicle -> Car -> Sedan.

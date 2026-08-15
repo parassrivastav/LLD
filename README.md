@@ -17,7 +17,11 @@ python3 -m unittest discover -s tests -v
 vehicle_system/
 ├── domain/         # Core abstractions, state, errors, and value objects
 ├── engines/        # Concrete Engine implementations
-├── vehicles/       # Concrete Vehicle implementations
+├── vehicles/
+│   └── cars/
+│       └── sedans/
+│           └── skoda/
+│               └── slavia.py
 ├── repositories/   # Persistence interface and implementations
 └── services/       # Application use cases
 tests/              # Tests grouped by responsibility
