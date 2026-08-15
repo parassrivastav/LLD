@@ -9,6 +9,9 @@ For a concept-by-concept explanation with examples, read
 For a principle-by-principle explanation of the design, read
 [`SOLID.md`](SOLID.md).
 
+For association, aggregation, composition, and inheritance, read
+[`Core-relations.md`](Core-relations.md).
+
 ```bash
 python3 main.py
 python3 -m unittest discover -s tests -v
