@@ -1,14 +1,6 @@
 import unittest
 
-from vehicle import (
-    Car,
-    ElectricMotor,
-    InMemoryVehicleRepository,
-    InvalidVehicleError,
-    Motorcycle,
-    VehicleError,
-    VehicleService,
-)
+from vehicle_system import Car, ElectricMotor, InvalidVehicleError, VehicleError
 
 
 class VehicleTests(unittest.TestCase):
@@ -32,22 +24,6 @@ class VehicleTests(unittest.TestCase):
         self.car.drive(12.5)
         self.assertEqual(self.car.odometer_km, 12.5)
         self.car.stop()
-
-    def test_polymorphism(self) -> None:
-        bike = Motorcycle("KA02AB1234", "Honda", "CB", ElectricMotor())
-        report = VehicleService(InMemoryVehicleRepository()).movement_report(
-            [self.car, bike]
-        )
-        self.assertIn("4 wheels", report[0])
-        self.assertIn("2 wheels", report[1])
-
-    def test_repository_and_duplicate_rule(self) -> None:
-        repository = InMemoryVehicleRepository()
-        service = VehicleService(repository)
-        service.register(self.car)
-        self.assertIs(repository.get("ka01ab1234"), self.car)
-        with self.assertRaises(VehicleError):
-            service.register(self.car)
 
     def test_equality_and_hash_use_registration(self) -> None:
         duplicate = Car("KA01AB1234", "Other", "Car", ElectricMotor())

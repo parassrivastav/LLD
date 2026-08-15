@@ -1,8 +1,8 @@
 # Vehicle project: beginner's walkthrough
 
-Read this file beside `vehicle.py`. The code is intentionally split into several
-small classes because OOP is about objects collaborating, not putting everything
-inside one enormous class.
+Read this file beside the `vehicle_system/` package. Classes are grouped into
+folders by responsibility because OOP is about objects collaborating, not putting
+everything inside one enormous class.
 
 ## 1. Class and object
 
@@ -262,8 +262,8 @@ injected through constructors, which also makes testing easy.
 ## 16. Run and experiment
 
 ```bash
-python3 vehicle.py
-python3 -m unittest -v
+python3 main.py
+python3 -m unittest discover -s tests -v
 ```
 
 Good exercises:

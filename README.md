@@ -7,8 +7,21 @@ For a concept-by-concept explanation with examples, read
 [`LEARNING_GUIDE.md`](LEARNING_GUIDE.md) alongside the source code.
 
 ```bash
-python3 vehicle.py
-python3 -m unittest -v
+python3 main.py
+python3 -m unittest discover -s tests -v
+```
+
+## Project structure
+
+```text
+vehicle_system/
+├── domain/         # Core abstractions, state, errors, and value objects
+├── engines/        # Concrete Engine implementations
+├── vehicles/       # Concrete Vehicle implementations
+├── repositories/   # Persistence interface and implementations
+└── services/       # Application use cases
+tests/              # Tests grouped by responsibility
+main.py             # Composition root and runnable demo
 ```
 
 ## OOP and class features
