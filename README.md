@@ -27,6 +27,27 @@ default/keyword arguments and named class methods such as `from_string()` instea
 Python also has no truly private fields; a leading underscore communicates protected
 internal state, while properties provide controlled access.
 
+## Reading the type annotations
+
+Annotations are optional labels that document expected types. They help readers,
+editors, and type-checking tools, but Python normally does not enforce them while the
+program runs.
+
+```python
+def drive(distance_km: float) -> str:
+```
+
+- `distance_km: float` says the argument should be a number.
+- `-> str` says the method should return text.
+- `-> None` means the method returns no useful value.
+- `Vehicle | None` means either a `Vehicle` or no result (`None`).
+- `list[str]` means a list containing strings.
+- `ClassVar[int]` identifies a class-level integer shared by objects.
+
+Decorators beginning with `@` are different from type annotations. A decorator
+changes or describes method/class behavior: examples include `@property`,
+`@classmethod`, `@staticmethod`, `@abstractmethod`, and `@dataclass`.
+
 ## SOLID mapping
 
 | Principle | Where it appears |

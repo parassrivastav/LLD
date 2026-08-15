@@ -1,5 +1,7 @@
 """Educational vehicle domain demonstrating Python OOP and SOLID principles."""
 
+# Keep type annotations as descriptions instead of evaluating them immediately.
+# This lets a method mention classes that are still being defined below.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -17,6 +19,8 @@ class InvalidVehicleError(VehicleError, ValueError):
 
 
 class VehicleState(Enum):
+    """Enum: a fixed set of allowed values, avoiding arbitrary state strings."""
+
     PARKED = "parked"
     RUNNING = "running"
 
@@ -24,11 +28,15 @@ class VehicleState(Enum):
 class Engine(ABC):
     """Abstraction implemented by any engine type (DIP and OCP)."""
 
+    # @property lets callers write `engine.energy_source` instead of calling
+    # `engine.energy_source()`, while the implementation remains a method.
     @property
     @abstractmethod
     def energy_source(self) -> str:
         """Return the source used to power this engine."""
 
+    # @abstractmethod forces each concrete Engine subclass to implement this.
+    # `-> str` is a return-type annotation: this method should return text.
     @abstractmethod
     def start(self) -> str:
         """Start the engine."""
@@ -72,19 +80,22 @@ class Vehicle(ABC):
     servicing are separate collaborators.
     """
 
+    # `: ClassVar[int]` is a type annotation. It says this integer belongs to
+    # the class and is shared, rather than being unique to each object.
     wheels: ClassVar[int] = 0
     vehicle_count: ClassVar[int] = 0
 
     def __init__(
         self,
+        # `: str` and `: Engine` document the expected argument types.
         registration: str,
         brand: str,
         model: str,
         engine: Engine,
-        *,
+        *,  # Arguments after * must be supplied by name, e.g. year=2024.
         year: int = 2026,
         odometer_km: float = 0,
-    ) -> None:
+    ) -> None:  # Constructors modify the object and do not return a value.
         self.registration = registration
         self.brand = brand
         self.model = model
@@ -94,6 +105,8 @@ class Vehicle(ABC):
         self._state = VehicleState.PARKED
         type(self).vehicle_count += 1
 
+    # Together, @property and @registration.setter provide controlled access
+    # to `_registration`; assignments are cleaned and validated in one place.
     @property
     def registration(self) -> str:
         return self._registration
@@ -123,12 +136,16 @@ class Vehicle(ABC):
     def display_name(self) -> str:
         return f"{self.brand} {self.model}"
 
+    # @classmethod receives the class as `cls`. It is commonly used for a
+    # named/alternative constructor. Python does not overload constructors.
     @classmethod
     def from_string(cls, data: str, engine: Engine) -> Vehicle:
         """Alternative constructor: 'registration,brand,model,year'."""
         registration, brand, model, year = (part.strip() for part in data.split(","))
         return cls(registration, brand, model, engine, year=int(year))
 
+    # @staticmethod belongs conceptually to Vehicle but needs no `self` or
+    # `cls`, because this calculation does not use an object or class state.
     @staticmethod
     def is_vintage(year: int) -> bool:
         return 2026 - year >= 25
@@ -157,6 +174,8 @@ class Vehicle(ABC):
     def move(self) -> str:
         """Describe movement; subclasses provide polymorphic behavior."""
 
+    # Double-underscore (`dunder`) methods integrate our class with Python.
+    # str(vehicle), repr(vehicle), ==, and set/dict hashing call these methods.
     def __str__(self) -> str:
         return f"{self.display_name} ({self.registration})"
 
@@ -179,6 +198,8 @@ class Car(Vehicle):
     wheels = 4
 
     def __init__(self, *args: object, seats: int = 5, **kwargs: object) -> None:
+        # *args collects positional arguments; **kwargs collects named ones.
+        # super() delegates the common initialization to Vehicle.__init__.
         super().__init__(*args, **kwargs)
         if seats < 1:
             raise InvalidVehicleError("a car needs at least one seat")
@@ -198,6 +219,8 @@ class Motorcycle(Vehicle):
 class Flyable(Protocol):
     """Small client-specific interface (ISP)."""
 
+    # Protocol describes an interface. Any object with a compatible `fly`
+    # method can be treated as Flyable without explicitly inheriting from it.
     def fly(self) -> str: ...
 
 
@@ -252,6 +275,8 @@ class VehicleService:
         return [vehicle.move() for vehicle in vehicles]
 
 
+# @dataclass automatically creates constructor/equality/display methods.
+# frozen=True prevents fields changing after a ServiceRecord is constructed.
 @dataclass(frozen=True)
 class ServiceRecord:
     """Immutable value object composed with a vehicle when needed."""
