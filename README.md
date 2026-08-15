@@ -6,6 +6,9 @@ system should use the same model. Run it with:
 For a concept-by-concept explanation with examples, read
 [`LEARNING_GUIDE.md`](LEARNING_GUIDE.md) alongside the source code.
 
+For a principle-by-principle explanation of the design, read
+[`SOLID.md`](SOLID.md).
+
 ```bash
 python3 main.py
 python3 -m unittest discover -s tests -v
