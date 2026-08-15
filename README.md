@@ -3,6 +3,9 @@
 This small Python project is a study example, not a claim that every real vehicle
 system should use the same model. Run it with:
 
+For a concept-by-concept explanation with examples, read
+[`LEARNING_GUIDE.md`](LEARNING_GUIDE.md) alongside the source code.
+
 ```bash
 python3 vehicle.py
 python3 -m unittest -v
